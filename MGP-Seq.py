@@ -953,10 +953,11 @@ def check_complementary(s1, s2, ratio, search, k=12):
         return (False, [], '')
 
 """Error messages of various types"""
-# Some programmers may cringe at this unnecessary OOP, so here it remains
+# I know this class looks completely useless, but I just really wanted the code to look fancier
 class References:
     def __init__(self):
         pass
+    
 error = References()
 # MISSING FIELD
 error.missing_field = "Missing Field"
