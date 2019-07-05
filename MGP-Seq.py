@@ -218,6 +218,10 @@ base_dict = {"G": "C",
              "T":"A"}
 
 bases = ['T', 'C', 'A', 'G']
+
+def reverse_complement(seq):
+    return [base_dict[b] for b in reversed(seq)]
+
 class Sequence:
     def __init__(self, original_dna='', loc=0,
                  file=''):
@@ -379,8 +383,7 @@ class Sequence:
         if not self.imp_flip:
             return None
         
-        self.moving_seq = list(map(lambda b: base_dict[b],
-                                    reversed(self.sequence)))
+        self.moving_seq = reverse_complement(self.sequence)
     
     def orient_imputations(self, imputations):
         reference = imputations.reference
@@ -397,8 +400,7 @@ class Sequence:
                 flip += 1
 
         if flip > retain:
-            self.moving_seq = list(map(lambda b: base_dict[b],
-                              reversed(self.moving_seq)))
+            self.moving_seq = reverse_complement(self.moving_seq)
             self.imp_flip = True
             
         self.orientation = list(self.moving_seq)
@@ -756,16 +758,11 @@ def DB_align(s1, s2, k=12, intron_cost=1, insertion_cost=3):
             query.clear()
             accounted.clear()
 
-            # this is the bit where we flip the sequence
-            s1_temp = ''
-            for c in reversed(s1):
-                if c in ("C", "G", "A", "T"):
-                    s1_temp += base_dict[c]
-            s1 = s1_temp
-
             # might as well take the exon seeds from check_complementary
             # rather than starting over again
+            # the same is done with s1's reverse complement
             seeds = check[1]
+            s1 = check[2]
 
     # Some helpful sorting here can narrow our alignment search space
     # since we know we are not going backwards on the cDNA strand
@@ -895,11 +892,7 @@ def DB_align(s1, s2, k=12, intron_cost=1, insertion_cost=3):
 
 # check_complementary is near-identical to the first half of DB_align
 def check_complementary(s1, s2, ratio, search, k=12):
-    s1_flip = ''
-    for c in reversed(s1):
-        if c in ("C", "G", "A", "T"):
-            s1_flip += base_dict[c]
-    s1 = s1_flip
+    s1 = ''.join(reverese_complement(s1))
             
     query = []
     for i in range(len(s1)-k+1):
@@ -955,9 +948,9 @@ def check_complementary(s1, s2, ratio, search, k=12):
     search.clear()
     query.clear()
     if r > ratio:
-        return (True, seeds)
+        return (True, seeds, s1)
     else:
-        return (False, [])
+        return (False, [], '')
 
 """Error messages of various types"""
 # Some programmers may cringe at this unnecessary OOP, so here it remains
@@ -975,8 +968,7 @@ error.no_ref = "No Reference Gene"
 # redText warnings
 warning = References()
 warning.no_header = """No header found.
-Please manually enter the gene location
-Please select 'complementary' if applicable"""
+Please manually enter the gene location"""
 
 # ALIGNMENT ERRORS
 error.alignment = "Exon Alignment Error"
@@ -984,7 +976,7 @@ error.no_path = "Failed to align mRNA to specified gDNA\n" +\
               "Try submitting an EMBOSS alignment file instead"
 
 # A definition is used so that the GUI can call the script at any time
-def impute(s_data, i_data, ref_data, loc, complementary, separator,
+def impute(s_data, i_data, ref_data, loc, separator,
            strain_set, confidence, output_key, threshold, alignment, gene_name,
            p_type):
     start_time = time.time()
@@ -1036,6 +1028,8 @@ def impute(s_data, i_data, ref_data, loc, complementary, separator,
 
         if output_key:
             gene.transcribe()
+        else:
+            gene.deorient()
 
         if output_key == 2:
             if p_type == 0:
@@ -1043,7 +1037,6 @@ def impute(s_data, i_data, ref_data, loc, complementary, separator,
             else:
                 output = gene.peptide_longest
         else:
-            gene.deorient()
             output = gene.sequence
         # Give each strain a unique file name
         text_name = strain + "_" + output_type + gene_name
@@ -1057,13 +1050,14 @@ def impute(s_data, i_data, ref_data, loc, complementary, separator,
     # Repeat the steps for the C57BL_6J reference output
     if output_key:
         gene.transcribe()
-        if output_key == 2:
-            if p_type == 0:   
-                output = gene.peptide
-            else:
-                output = gene.peptide_longest
     else:
         gene.deorient()
+    if output_key == 2:
+        if p_type == 0:   
+            output = gene.peptide
+        else:
+            output = gene.peptide_longest
+    else:
         output = gene.sequence
     
     text_name = "C57BL_6J_" + output_type + gene_name
@@ -1288,15 +1282,6 @@ class GUI:
         self.db_title = Tkinter.Label(self.search_frame, text="Search Gene Symbol:",
                                       bg=b_color)
         self.db_title.grid(row=0, column=0, sticky="E")
-        
-        # Enter Complementary
-        self.comp = Tkinter.IntVar(master)
-        self.comp.set(0)
-        self.check = ttk.Checkbutton(self.mid_frame, text="Complementary",
-                                     variable=self.comp, style="My.TCheckbutton")
-        self.check.grid(row=5, columnspan=2)
-
-        
 
         # Warning Label
         self.label = Tkinter.Label(self.mid_frame, text="",
@@ -1681,17 +1666,14 @@ class GUI:
                 # If the first number has a 'c' before it, complementary is made True
                 try:
                     self.locus.set(int(header[indices[0] + 1:indices[1]]))
-                    self.comp.set(0)
                 except ValueError:
                     self.locus.set(int(header[indices[1] + 1:indices[2]]))
-                    self.comp.set(1)
                     # Starting location of gene identified
                 self.separator = sep
         except (ValueError, IndexError) as header_not_found:
             # Happens when there is no header
             self.label.configure(text=warning.no_header)
             self.locus.set("")
-            self.comp.set(0)
             self.separator = -1
 
     def start(self):
@@ -1726,10 +1708,7 @@ class GUI:
     
             # The impute function below triggers the actual script
             if proceed:
-                if self.conf.get() == 1:
-                    c_retain = False
-                else:
-                    c_retain = True
+                confidence = bool(self.conf.get())
                 t_strain = []
                 # Collect combined list of selected strains without duplicates
                 for g in set(self.snp_cols) | set(self.indel_cols):
@@ -1746,9 +1725,8 @@ class GUI:
                     if tup[1] or tup[2]:
                         t_strain.append(tup)
                 # Send the user input to the imputer function                    
-                impute(snp_file, indel_file,
-                       ref_file, locus, self.comp.get(),
-                       self.separator, t_strain, c_retain, self.p_or_g.get(),
+                impute(snp_file, indel_file, ref_file, locus, self.separator,
+                       t_strain, confidence, self.p_or_g.get(),
                        self.threshold.get(), self.a_file.get(), self.db_query.get(),
                        self.p_type.get())
 
