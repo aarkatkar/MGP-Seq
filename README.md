@@ -6,7 +6,7 @@ A python application for predicting DNA, RNA, and amino acid sequences for genes
 ### Prerequisites
 Download and install Python (<a href="https://www.python.org/downloads/">https://www.python.org/downloads/</a>) to your computer. MGP-Seq is compatible with Python 2 and Python 3. 
 
-#### Additional Prequisites (Python 3 + Mac OSX)
+#### Additional Prequisites for Python 3 + Mac OSX
 You will have to upgrade *certifi.* There are two options for doing this:
 1. Open the terminal and enter ```pip install --upgrade certifi```
 2. Run ```Applications/Python 3.6/Install Certificates.command``` either through the terminal or by browsing to file and double-clicking it
