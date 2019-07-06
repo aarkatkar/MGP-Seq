@@ -1763,32 +1763,6 @@ root.style = ttk.Style()
 root.style.configure("My.TCheckbutton", background=b_color)
 root.style.configure("My.TMenubutton", background=a_color)
 root.style.configure("My.TRadiobutton", background=b_color)
-root.title("Gene Coordinates Imputation")
+root.title("MGP-Seq")
 main_ui = GUI(root)
 root.mainloop()
-
-#########################################################################################
-# .				   -Peter Dornbos-
-#               /hs.            .sh/               
-#             /mN-                -Nm/             
-#           `yMM-                  -MMy`           
-#           dMMy                    yMMd           
-#          oMMMs       .-::-.       sMMMo          
-#          NMMMm  .+ymMMMMMMMMmy+.  mMMMN          
-#          MMMMMs-MMMMmhsssshmMMMM-sMMMMM          
-#       `+hMMMMMMh/y/`        `/y/hMMMMMMh+`       
-#     -hMMMMMMMMMMMh/`        `/hMMMMMMMMMMMh-     
-#   `yMMMMMMNNNMMMMMMMmhs:/shmMMMMMMMNNNMMMMMMy`   
-#  `mMMmo:. :yyo-/smMMMd:``:hMMMms/-syy: .:omMMm`  
-#  dMh-     oMMM`   :dM.    .Mm:   `MMMo     -hMd  
-# /M+       /MMM:     :o:``:o:     :MMM/       +M/ 
-# ys        `mMMm`     yMMMMh     `mMMm         sy 
-#  `         -NMMm:    -MMMM-    :mMMN-         `y 
-#            .dMMMd/` -MMMM- `/dMMMd.          `/ 
-#               :dMMMM+oMMMMo+MMMMd:            
-#                 .+yy/MMMMMM/yy+.                 
-#                   `sMMMMMMMMs`               
-#                `:yNMMMMMMMMMMNy:`            
-#        `+syyyhdmMMMMMMmy::smMMMMMMmdhyyys+`       
-#           `:/+ooo+/-`      `-/+ooo+/:.                                                                 
-#########################################################################################
