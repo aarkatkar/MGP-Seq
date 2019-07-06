@@ -27,7 +27,7 @@ MGP-Seq.py is the only file that needs to be downloaded from this repository. Py
 Steps 1-5 are the same as predicting Gene Sequences
 
 6. Download the desired Reference Transcript through the drop-down menu
-7. Specify an exon seed length the alignment algorithm. The length should always be a positive integer and is optimally between 10-14. The default length = 12 will work for most cases. If an alignment fails, nudging the seed length to 11 or 13 might fix the problem
+7. Specify an exon seed length for the alignment algorithm. The length should always be a positive integer and is optimally between 10-14. The default length = 12 will work for most cases. If an alignment fails, nudging the seed length to 11 or 13 might fix the problem
 8. Click "Impute"
 
 <p align="center">
@@ -51,7 +51,14 @@ You might want to use files stored locally on your computer rather than files qu
 
 + Homemade SNP/Indel files should follow the following format:
 
-+ MGP-Seq can parse Reference Gene files in a specific format to automatically identify the starting position of the gene. Homemade Reference Gene files might not follow this format and <b>you will have to type in the the position of the first base into the *Gene Location* box</b>. Alternatively, you can edit your file to follow the format by specifying the gene sequence range after a colon. An example is given below.
+| Chr | Position  | Gene  | dbSNP       | Ref | PWK_PhJ |
+| --- | --------  | ----  | ----------- | --- | ------  |
+| 12  | 35498379  | Ahr   | rs241381828 | T   | TA      |
+| 12  | 35502300  | Ahr   | rs255095624 | AAC | A       |
+
+The first line indicates that at position 35498379, an insertion replaces T in the reference sequence with TA in the PWK_PhJ strain. The second line indicates that at position 35502300, a deletion replaces ACC with A in the same fashion. <i>Position</i> refers to the position in the chromosome of the first base in <i>Ref</i>. The file should be formatted as a Comma Separated Variable file with UTF-8 encoding. The *Gene Location* is subtracted from the Position column to determine the 0-based index in the gene that will be imputed. For example, if the SNP file says that a SNP occurs in position 101, and 100 is entered into the *Gene Location* box, the SNP will occur at the 2nd nucleotide of the reference gene (or the 1st 0-based index).
+
++ MGP-Seq can parse Reference Gene files in a specific format to automatically identify the starting position of the gene. Homemade Reference Gene files might not follow this format and <b>you will have to type in the the position of the first base into the *Gene Location* box</b>. Alternatively, you can edit your file to follow the header format by specifying the gene sequence range after a colon. An example is given below.
 ```
 >AHR:35497979-35534989
 ATTTGGTGGTTAGTTTATTATCATATATCACTGTTTACATTTCCTTTGATATTTAAGGACATTATAAATCATACTT
