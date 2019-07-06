@@ -26,7 +26,7 @@ MGP-Seq.py is the only file that needs to be downloaded from this repository. Py
 ### mRNA Sequences
 Steps 1-5 are the same as predicting Gene Sequences
 
-6. Download the desired Reference Transcript through the drop-down menu
+6. Download the desired Reference Transcript (Alignment file)
 7. Specify an exon seed length for the alignment algorithm. The length should always be a positive integer and is optimally between 10-14. The default length = 12 will work for most cases. If an alignment fails, nudging the seed length to 11 or 13 might fix the problem
 8. Click "Impute"
 
