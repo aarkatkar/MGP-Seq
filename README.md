@@ -4,10 +4,10 @@ A python application for predicting DNA, RNA, and amino acid sequences for genes
 ## Getting Started
 
 ### Prerequisites
-+ Download and install Python (<a href="https://www.python.org/downloads/">https://www.python.org/downloads/</a>) to your computer. MGP-Seq is compatible with Python 2 and Python 3. 
++ Download and install Python (<a href="https://www.python.org/downloads/">https://www.python.org/downloads/</a>) to your computer. MGP-Seq is only compatible with Python versions 3.X. 
 + Download *MGP-Seq.py* to any location on your computer
 
-#### Additional Prequisites for Python 3 + Mac OSX
+#### Additional Prequisites for Python 3.6+ AND Mac OSX
 You will have to upgrade *certifi.* There are two options for doing this:
 1. Open the terminal and enter ```pip install --upgrade certifi```
 2. Run ```Applications/Python 3.6/Install Certificates.command``` either through the terminal or by browsing to the file and double-clicking it
@@ -17,7 +17,7 @@ You will have to upgrade *certifi.* There are two options for doing this:
 Python scripts can be run using the steps described <a href="http://www.cs.bu.edu/courses/cs108/guides/runpython.html">here.</a>
 
 ## Predicting Sequences
-Once you are all set, click *Impute* to output the predicted sequence(s). An additional C57BL_6J reference is output each time.
+After completing the following steps, click *Impute* to output the predicted sequence(s). An additional C57BL_6J reference is output each time.
 
 ### Gene Sequences
 1. Search for your desired gene in the search box at the top of the window and hit Enter
@@ -43,7 +43,7 @@ Complete all of the steps required to predict a gene sequence, in addition to th
 ### Protein Sequences
 Complete all of the steps required to predict an mRNA sequence, in addition to the following:
 
-8. Select which ORF will be translated in the output. *Minimize 5'-UTR* selects the ORF that starts at the very first start codon and ends at the following stop codon. *Maximize ORF* looks at all potential ORFs and translates the longest one. During our testing, *Maximize ORF* was more consistently correct
+8. Select which ORF will be translated in the output. *Minimize 5'-UTR* selects the ORF that starts at the very first start codon and ends at the following stop codon. *Maximize ORF* examines the ORF beginning with each potential start codon and translates the longest one. 
 
 <p align="center">
   <img src="./resources/Protein.JPG" width="60%">
