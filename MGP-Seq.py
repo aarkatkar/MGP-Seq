@@ -949,7 +949,7 @@ def check_complementary(s1, s2, ratio, search, k=12):
         return False, [], ''
 
 """Error messages of various types"""
-# Some programmers may cringe at this unnecessary OOP, so here it remains
+# Perhaps the most useful, most complex class ever
 class References:
     def __init__(self):
         pass
