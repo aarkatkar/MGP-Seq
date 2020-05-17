@@ -9,7 +9,7 @@ A python application for predicting DNA, RNA, and amino acid sequences for genes
 
 #### Additional Prequisites for Python 3.6+ AND Mac OSX
 You will have to upgrade *certifi.* There are two options for doing this:
-1. Open the terminal and enter ```pip install --upgrade certifi```
+1. Open the terminal and enter (in order): a) ```python3 -m pip install -U pip``` and b) ```pip install --upgrade certifi```
 2. Run ```Applications/Python 3.6/Install Certificates.command``` either through the terminal or by browsing to the file and double-clicking it
 
 
